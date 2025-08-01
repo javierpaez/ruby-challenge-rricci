@@ -29,7 +29,7 @@ class BooksController < ApplicationController
 
   # PATCH/PUT /books/1
   def update
-    if @book.update(book_params)
+    if ::ReserveBookService.new(@book, book_params[:reserverd_by]).call
       render json: @book
     else
       render json: @book.errors, status: :unprocessable_entity
@@ -74,6 +74,6 @@ class BooksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def book_params
-      params.expect(book: [ :title, :author_id, :publication_date, :rating, :status ])
+      params.expect(book: [ :title, :author_id, :publication_date, :rating, :status, :reserverd_by ])
     end
 end
